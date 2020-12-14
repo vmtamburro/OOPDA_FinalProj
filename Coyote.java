@@ -17,7 +17,7 @@ public class Coyote extends Animal
     // The age to which a coyote can live.
     private static final int MAX_AGE = 150;
     // The likelihood of a coyote breeding.
-    private static final double BREEDING_PROBABILITY = 0.08;
+    private static final double BREEDING_PROBABILITY = 0.062;
     // The maximum number of births.
     private static final int MAX_LITTER_SIZE = 2;
     // The food value of a single rabbit. In effect, this is the
@@ -25,14 +25,14 @@ public class Coyote extends Animal
     private static final int RABBIT_FOOD_VALUE = 9;
     // The food value of a single fox. In effect, this is the
     // number of steps a coyote can go before it has to eat again.
-    private static final int FOX_FOOD_VALUE = 13;
+    private static final int FOX_FOOD_VALUE = 20;
     // A shared random number generator to control breeding.
     private static final Random rand = Randomizer.getRandom();
     
     // Individual characteristics (instance fields).
     // The coyote's age.
     private int age;
-    // The coyote's food level, which is increased by eating rabbits.
+    // The coyote's food level, which is increased by eating rabbits and foxes.
     private int foodLevel;
 
     /**
@@ -43,11 +43,12 @@ public class Coyote extends Animal
         super(field, location);
         if(randomAge){
             age = rand.nextInt(MAX_AGE);
-            foodLevel = rand.nextInt((RABBIT_FOOD_VALUE + FOX_FOOD_VALUE) / 2);
+            int foodvalue = (RABBIT_FOOD_VALUE + FOX_FOOD_VALUE) / 2;
+            foodLevel = rand.nextInt(foodvalue);
         }
         else{
             age = 0;
-            foodLevel = (RABBIT_FOOD_VALUE + FOX_FOOD_VALUE) / 2;
+            foodLevel = (FOX_FOOD_VALUE + RABBIT_FOOD_VALUE) / 2;
         }
     }
 
@@ -105,7 +106,7 @@ public class Coyote extends Animal
     }
     
     /**
-     * Look for rabbits adjacent to the current location.
+     * Look for rabbits or foxes adjacent to the current location.
      * Only the first live rabbit is eaten.
      * @return Where food was found, or null if it wasn't.
      */
